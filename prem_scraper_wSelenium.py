@@ -1,5 +1,5 @@
 import os
-os.chdir('/Users/julianashwin/Desktop')
+os.chdir('/Users/julianashwin/Documents/GitHub/prem_scraper')
 path_to_chromedriver = '/Users/julianashwin/Desktop/text_data_scraper/chromedriver'
 
 import selenium
@@ -19,17 +19,17 @@ from bs4 import BeautifulSoup
 
 driver = webdriver.Chrome(path_to_chromedriver)
 
-driver.get("https://www.premierleague.com/stats/top/players/touches")
+driver.get("https://www.premierleague.com/stats/top/players/goals")
 
 html = driver.page_source
 soup = BeautifulSoup(html, "html.parser")
 
 # Create an empty dataframe to fill iteratively
-columns = ['player_name','touches', 'year']
-touches_df = pd.DataFrame(columns = columns)
+columns = ['player_name','goals', 'year']
+goals_df = pd.DataFrame(columns = columns)
 prev_names = []
 
-year = "2009/2010"
+year = "2006/2007"
 for i in range(1,100):
 
     time.sleep(np.random.uniform(1.5,3))
@@ -43,7 +43,7 @@ for i in range(1,100):
     main_stat = soup.find_all('td', {'class': 'mainStat'})
 
     player_names_vec = []
-    touches_vec = []
+    goals_vec = []
 
     temp_df = pd.DataFrame(index = range(0,len(player_names)), columns = columns)
 
@@ -55,19 +55,19 @@ for i in range(1,100):
 
         temptext = main_stat[a].text
         temptext = temptext.encode("utf-8")
-        touches_vec.append(temptext)
+        goals_vec.append(temptext)
 
     temp_df.player_name = player_names_vec
-    temp_df.touches = touches_vec
-    temp_df.touches = temp_df.touches.str.replace(",","")
-    temp_df.touches = temp_df.touches.astype(int)
+    temp_df.goals = goals_vec
+    temp_df.goals = temp_df.goals.str.replace(",","")
+    temp_df.goals = temp_df.goals.astype(int)
 
     temp_df.year = year
 
     if prev_names == player_names_vec:
         break
 
-    touches_df = touches_df.append(temp_df)
+    goals_df = goals_df.append(temp_df)
 
     next_button = driver.find_element_by_css_selector("div.paginationBtn.paginationNextContainer")
     next_button.click()
@@ -76,7 +76,7 @@ for i in range(1,100):
 
 
 # Plot histogram
-plt.hist(touches_df.touches)
+plt.hist(goals_df.goals)
 plt.show()
 
-touches_df.to_csv("touches_data.csv", encoding = "utf-8")
+goals_df.to_csv("goals_data.csv", encoding = "utf-8")
