@@ -29,7 +29,7 @@ columns = ['player_name','touches', 'year']
 touches_df = pd.DataFrame(columns = columns)
 prev_names = []
 
-year = "2009/2010"
+year = "2006/2007"
 for i in range(1,100):
 
     time.sleep(np.random.uniform(1.5,3))

@@ -1,3 +1,5 @@
+import os
+os.chdir('/Users/julianashwin/Desktop')
 path_to_chromedriver = '/Users/julianashwin/Desktop/text_data_scraper/chromedriver'
 
 import selenium
@@ -27,7 +29,7 @@ columns = ['player_name','touches', 'year']
 touches_df = pd.DataFrame(columns = columns)
 prev_names = []
 
-year = "2015/2016"
+year = "2009/2010"
 for i in range(1,100):
 
     time.sleep(np.random.uniform(1.5,3))
@@ -73,9 +75,8 @@ for i in range(1,100):
     prev_names = player_names_vec
 
 
-touches_df.touches = touches_df.touches.str.replace(",","")
-touches_df.touches = touches_df.touches.astype(int)
-
 # Plot histogram
 plt.hist(touches_df.touches)
 plt.show()
+
+touches_df.to_csv("touches_data.csv", encoding = "utf-8")
